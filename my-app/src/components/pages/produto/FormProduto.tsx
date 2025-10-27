@@ -1,37 +1,53 @@
-import { useState } from "react";
-import { api } from "../../../api";
+import React, { useState } from 'react';
+import { api } from '../../../api'; 
 
-export function FormProduto() {
-  const [nome, setNome] = useState("");
+interface FormProdutoProps {
+  onProdutoCadastrado: () => void; 
+}
+
+// 2. Receba a prop
+export function FormProduto({ onProdutoCadastrado }: FormProdutoProps) {
+  // Seus states do formulário (nome, preco, etc.)
+  const [nome, setNome] = useState('');
   const [preco, setPreco] = useState(0);
   const [estoque, setEstoque] = useState(0);
   const [categoriaId, setCategoriaId] = useState(1);
 
-  async function salvar() {
-    await api.post("/produtos", { nome, preco, estoque, categoriaId });
-    alert("Produto cadastrado com sucesso!");
-  }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    try {
+      const novoProduto = { nome, preco, estoque, categoriaId };
+      // Usando 'produtos' na rota POST (mais convencional)
+      await api.post('/produtos', novoProduto); 
+      
+      alert('Produto cadastrado com sucesso!');
+      
+      onProdutoCadastrado(); 
+
+      
+      setNome('');
+      setPreco(0);
+      setEstoque(0);
+      setCategoriaId(1);
+
+    } catch (error) {
+      console.error('Erro ao cadastrar:', error);
+      alert('Erro ao cadastrar. Verifique a Categoria ID.');
+    }
+  };
 
   return (
     <div>
       <h2>Cadastrar Produto</h2>
-      <input placeholder="Nome" onChange={(e) => setNome(e.target.value)} />
-      <input
-        type="number"
-        placeholder="Preço"
-        onChange={(e) => setPreco(Number(e.target.value))}
-      />
-      <input
-        type="number"
-        placeholder="Estoque"
-        onChange={(e) => setEstoque(Number(e.target.value))}
-      />
-      <input
-        type="number"
-        placeholder="Categoria ID"
-        onChange={(e) => setCategoriaId(Number(e.target.value))}
-      />
-      <button onClick={salvar}>Salvar</button>
+      <form onSubmit={handleSubmit}>
+        {       }
+        <input type="text" placeholder="Nome" value={nome} onChange={e => setNome(e.target.value)} required />
+        <input type="number" placeholder="Preço" value={preco} onChange={e => setPreco(parseFloat(e.target.value))} required />
+        <input type="number" placeholder="Estoque" value={estoque} onChange={e => setEstoque(parseInt(e.target.value))} required />
+        <input type="number" placeholder="Categoria ID" value={categoriaId} onChange={e => setCategoriaId(parseInt(e.target.value))} required />
+        <button type="submit">Salvar</button>
+      </form>
     </div>
   );
 }

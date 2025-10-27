@@ -2,6 +2,12 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDataContext>();
+
+builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
+{
+    options.SerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+});
+
 builder.Services.AddCors(options =>
     options.AddPolicy("Acesso Total",
         configs => configs
@@ -61,6 +67,7 @@ app.MapDelete("/produtos/{id}", async (AppDataContext db, int id) =>
     return Results.Ok();
 });
 
+app.UseCors("Acesso Total");
+
 app.Run();
 
-app.UseCors("Acesso Total");

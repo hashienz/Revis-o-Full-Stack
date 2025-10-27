@@ -1,24 +1,29 @@
-import { useEffect, useState } from "react";
-import { api } from "../../../api";
+import React from "react"; 
 import { Produto } from "../../../models/Produto";
 
-export function ListaProdutos() {
-  const [produtos, setProdutos] = useState<Produto[]>([]);
+interface ListaProdutosProps {
+  produtos: Produto[];
+}
 
-  useEffect(() => {
-    api.get("/produtos").then((res) => setProdutos(res.data));
-  }, []);
+export function ListaProdutos({ produtos }: ListaProdutosProps) {
 
   return (
     <div>
       <h2>Lista de Produtos</h2>
-      <ul>
-        {produtos.map((p) => (
-          <li key={p.id}>
-            {p.nome} — R$ {p.preco.toFixed(2)} ({p.categoria?.nome})
-          </li>
-        ))}
-      </ul>
+
+      { }
+      {produtos.length === 0 ? (
+        <p>Nenhum produto cadastrado ainda.</p>
+      ) : (
+        <ul>
+          {}
+          {produtos.map((p) => (
+            <li key={p.id}>
+              {p.nome} — R$ {p.preco.toFixed(2)} ({p.categoria?.nome})
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

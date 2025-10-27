@@ -1,0 +1,31 @@
+### Requisição
+
+### Listar as Categorias 
+
+GET http://localhost:5122/categorias
+
+### Listar todos os produtos 
+
+GET http://localhost:5122/produtos
+
+
+### Cadastar Categorias 
+
+POST  http://localhost:5122/categorias
+Content-Type: application/json
+
+{
+  "nome": "Bebidas"
+}
+
+### Cadastrar um produto
+
+POST  http://localhost:5122/produtos/
+Content-Type: application/json
+
+{
+  "nome": "Teste",
+  "preco": 10.5,
+  "estoque": 5,
+  "categoriaId": 1
+}
